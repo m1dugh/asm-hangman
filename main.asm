@@ -1,5 +1,7 @@
 extern printf
 
+extern len, blind_copy
+
 section .data
 	msg db "Hello, World",0
 	str_format db "%s",10,0

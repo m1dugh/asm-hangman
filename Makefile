@@ -5,7 +5,7 @@ LK=gcc
 LFLAGS=-no-pie
 # LFLAGS=-e main -lc -I /lib/ld-linux-x86-64.so.2
 
-SRC=main.asm
+SRC=main.asm utils/strings.asm
 OBJ_FOLDER=obj
 OBJ=$(SRC:%.asm=$(OBJ_FOLDER)/%.o)
 BIN_FOLDER=bin
@@ -31,8 +31,8 @@ link: $(OBJ)
 
 build: $(OBJ)
 
-$(OBJ_FOLDER)/%.o: $(SRC)
-	@mkdir -p $(OBJ_FOLDER)
+$(OBJ_FOLDER)/%.o: %.asm
+	@NAME=$(shell echo $@ | awk -F/ '{for(i=1;i<NF;i++) printf "%s/", $$i; printf "\n"}'); mkdir -p $$NAME
 	$(CC) $(CFLAGS) -o $@ $< 
 
 clean:
