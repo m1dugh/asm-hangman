@@ -17,12 +17,12 @@ main:
 	mov rsi, msg
 	call printf
 
-	mov rsi, msg
-	call len
+	mov rdi, msg
+	call blind_copy
 
 	mov rsi, rax
 	mov rax, 0
-	mov rdi, int_fmt
+	mov rdi, str_fmt
 	call printf
 
 	; exit(0);
