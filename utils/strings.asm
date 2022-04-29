@@ -38,6 +38,7 @@ blind_copy:
 	mov [rbp-8], rax
 	; [rbp-8]=rdi:str.length
 	mov rdi, rax
+	add rax, 1
 	call malloc
 	mov [rbp-16], rax
 	mov rdi, [rbp-8]
@@ -50,6 +51,7 @@ blind_copy:
 	jnz .loop
 
 .exit:
+	mov BYTE [rax], 0
 	mov rax, [rbp-16]
 	mov rsp, rbp
 	pop rbp
