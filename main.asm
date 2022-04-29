@@ -6,6 +6,14 @@ extern randint
 
 section .data
 	msg db "Hello, World",0
+	buffsize dq 1024
+
+section .bss
+	copy resb 8 	; the pointer to the blind copy
+	tries resb 4	; the number of tries
+	wlen resb 4		; the length of the string
+
+	data resb 1024	; the data that will be read
 
 
 section .text
@@ -44,6 +52,19 @@ dig_str:
 	mov rsp, rbp
 	pop rbp
 	ret
+
+read_input:
+	; reads an input from stdin
+	; returns al: the read character
+	mov rax, 0			; read(
+	mov rdi, 0			; 	stdin,
+	mov rsi, data		; 	data,
+	mov rdx, buffsize 	;	buffsize
+	syscall 			; )
+
+	mov al, [data]
+	ret
+	
 	
 
 main:
@@ -52,6 +73,8 @@ main:
 	mov rdi, str_fmt
 	mov rsi, msg
 	call printf
+
+	call read_input
 
 	mov rdi, msg
 	call blind_copy
