@@ -1,7 +1,7 @@
 extern malloc, free
 
 global str_fmt, int_fmt, float_fmt
-global len, blind_copy
+global len, blind_copy, mutate_str
 
 
 
@@ -38,7 +38,7 @@ blind_copy:
 	mov [rbp-8], rax
 	; [rbp-8]=rdi:str.length
 	mov rdi, rax
-	add rax, 1
+	add rdi, 1
 	call malloc
 	mov [rbp-16], rax
 	mov rdi, [rbp-8]
@@ -56,3 +56,33 @@ blind_copy:
 	mov rsp, rbp
 	pop rbp
 	ret
+
+mutate_str:
+	; rax is the string to be mutated
+	; rdi is the index to change
+	; sil is the letter to replace with
+	push rbp
+	mov rbp, rsp
+	
+	mov rdx, rax
+.loop:
+	; if index found replace
+	test rdi, rdi
+	jz .replace
+
+	; cx is the current char
+	mov cx, [rdx]
+
+	sub rdi, 1
+	add rdx, 1
+	test cx, cx
+	jnz .loop
+	jmp .exit
+
+.replace:
+	mov BYTE [rdx], sil
+	
+.exit:
+	mov rsp, rbp
+	pop rbp
+	ret	

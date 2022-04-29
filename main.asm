@@ -1,6 +1,6 @@
 extern printf
 
-extern len, blind_copy
+extern len, blind_copy, mutate_str
 extern str_fmt, int_fmt
 extern randint
 
@@ -20,6 +20,10 @@ main:
 
 	mov rdi, msg
 	call blind_copy
+
+	mov rdi, 3
+	mov sil, 'l'
+	call mutate_str
 
 	mov rsi, rax
 	mov rax, 0
