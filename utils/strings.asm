@@ -25,6 +25,7 @@ len:
 	add rbx, 1
 	test cx, cx
 	jnz .loop
+	sub rax, 1
 	ret
 
 blind_copy:
