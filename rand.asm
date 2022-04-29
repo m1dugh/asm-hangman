@@ -1,4 +1,6 @@
 extern int_fmt
+extern srand, rand, RAND_MAX
+extern time
 
 global randint
 
@@ -8,7 +10,7 @@ section .text
 randint:
 	push rbp
 	mov rbp, rsp
-	sub rsp, 16
+	sub rsp, 24
 	; args: range [rdi; rsi[
 	; returns a random number between range
 	mov [rbp-8], rdi
@@ -26,8 +28,22 @@ randint:
 	mov [rbp-16], rbx
 	mov [rbp-8], rax
 .LC0:
+	; random generator init
+	mov edi, 0
+	call time
+	mov edi, eax
+	call srand
+	; generating random number
+	mov rax, 0
+	call rand
+	xor rdx, rdx
+	mov rbx, [rbp-16]; RAND_MAX
+	mov rcx, [rbp-8]
+	sub rbx, rcx
+	div rbx
 	
-	mov rax, [rbp-8]
+	add rdx, rcx
+	mov rax, rdx
 	mov rsp, rbp
 	pop rbp
 	ret

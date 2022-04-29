@@ -26,8 +26,8 @@ main:
 	mov rdi, str_fmt
 	call printf
 
-	mov rdi, 5
-	mov rsi, 3
+	mov rdi, 3
+	mov rsi, 5
 	call randint
 
 	mov rsi, rax
