@@ -1,6 +1,6 @@
 extern malloc, free
 
-global str_fmt, int_fmt, float_fmt
+global str_fmt, int_fmt, float_fmt, chr_fmt
 global len, blind_copy, mutate_str
 
 
@@ -9,6 +9,7 @@ section .data
 	str_fmt db "%s", 10, 0
 	int_fmt db "%d", 10, 0
 	float_fmt db "%f", 10, 0
+	chr_fmt db "%c", 10, 0
 
 
 
@@ -35,20 +36,22 @@ blind_copy:
 	; rdi: the null-terminated string
 	; returns rax the blind_copy
 	call len
-	mov [rbp-8], rax
-	; [rbp-8]=rdi:str.length
+	mov [rbp-8], rdi
+	; [rbp-8]: the string
 	mov rdi, rax
 	add rdi, 1
 	call malloc
 	mov [rbp-16], rax
+	; rbp-16: the blind copy
 	mov rdi, [rbp-8]
 .loop:
-	test rdi, rdi
+	mov cl, [rdi]
+	test cl, cl
 	jz .exit
 	mov BYTE [rax], '_'
 	add rax, 1
-	sub rdi, 1
-	jnz .loop
+	add rdi, 1
+	jmp .loop
 
 .exit:
 	mov BYTE [rax], 0
