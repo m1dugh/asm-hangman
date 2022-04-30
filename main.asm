@@ -8,6 +8,7 @@ section .data
 	msg db "Hello, World",0
 	temp db "hangman", 0
 	buffsize dq 1024
+	maxtries dd 10			; the max number of tries
 
 section .bss
 	secret resq 1	; the pointer to the word 
@@ -114,9 +115,15 @@ main:
 	mov QWORD [found], rdx
 	jmp .post_wrong
 .wrong:
-	mov rdx, [tries]
-	add rdx, 1
-	mov [tries], rdx
+	mov edx, [tries]
+	add edx, 1
+	mov DWORD [tries], edx
+
+	; checks the tries
+	mov eax, [maxtries]
+	cmp edx, eax
+	jg .lost
+	
 .post_wrong:
 
 	; prints blind
@@ -125,11 +132,18 @@ main:
 	mov rsi, [blind]
 	call printf
 
+
 	mov eax, [wlen]
 	mov edx, [found]
 	cmp edx, eax
 	jl .loop
-	
+	; won 
+	; you won in %d tries
+	jmp .exit
+.lost:
+	; you lost ...
+
+.exit:	
 
 	; exit(0);
 	mov rax, 60
