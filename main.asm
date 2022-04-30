@@ -2,6 +2,7 @@ extern printf
 
 extern len, blind_copy, mutate_str
 extern str_fmt, int_fmt, chr_fmt
+extern get_word
 extern randint
 
 section .data
@@ -76,7 +77,9 @@ read_input:
 main:
 	; startup
 	; sets up the secret word
-	mov QWORD [secret], temp
+	call get_word
+	mov rax, temp
+	mov QWORD [secret], rax
 
 
 	; sets up the length

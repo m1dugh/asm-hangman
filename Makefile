@@ -5,7 +5,7 @@ LK=gcc
 LFLAGS=-no-pie
 # LFLAGS=-e main -lc -I /lib/ld-linux-x86-64.so.2
 
-SRC=main.asm utils/strings.asm rand.asm
+SRC=main.asm utils/strings.asm rand.asm utils/files.asm
 OBJ_FOLDER=obj
 OBJ=$(SRC:%.asm=$(OBJ_FOLDER)/%.o)
 BIN_FOLDER=bin
