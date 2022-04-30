@@ -5,7 +5,8 @@ extern str_fmt, int_fmt, chr_fmt
 extern randint
 
 section .data
-	msg db "Hello, World",0
+	lost db "You lost... The word was %s", 10, 0
+	won db "You won in %d tries", 10, 0
 	temp db "hangman", 0
 	buffsize dq 1024
 	maxtries dd 10			; the max number of tries
@@ -139,9 +140,17 @@ main:
 	jl .loop
 	; won 
 	; you won in %d tries
+	xor rax, rax
+	mov rdi, won
+	mov rsi, [tries]
+	call printf
 	jmp .exit
 .lost:
 	; you lost ...
+	xor rax, rax
+	mov rdi, lost
+	mov rsi, [secret]
+	call printf
 
 .exit:	
 
