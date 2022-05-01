@@ -11,6 +11,7 @@ section .data
 section .bss
 	buffer 	resb 1024	; the buffer
 	lcount 	resd 1		; the count of lines
+	index 	resd 1		; the index of the chosen word
 	chr		resb 1		; the current read char
 
 
@@ -32,8 +33,7 @@ get_word:
 	mov rsi, 0			; 	O_RDONLY,
 	xor rdx, rdx		; 	WRITE
 	syscall				; )
-	mov rdx, 0
-	cmp rax, rdx
+	cmp rax, 0
 	jle .exit
 	mov [rbp-8], rax
 
@@ -57,15 +57,23 @@ get_word:
 	sub edi, 1
 	; if (cl == "\n")
 	; 	counter++;
-
+	cmp cl, 0xa
+	jne .loop1_1
+	mov rdx, [lcount]
+	add rdx, 1
+	mov [lcount], rdx
 	jmp .loop1_1
 	
 .exit1_1:
 	mov eax, [rbp-12]
-	mov edx, [buffsize]
-	cmp eax, edx
+	cmp eax, [buffsize]
 	jge .loop1
+
 	; generate randint between 0 and lcount-1
+	mov rdi, 0
+	mov rsi, [lcount]
+	call randint
+	mov [index], eax	; set the index of the word
 
 	; find the length of the word
 	; store the word on the buffer

@@ -1,0 +1,5 @@
+hangman
+turtle
+hello
+sheep
+overwhelming
