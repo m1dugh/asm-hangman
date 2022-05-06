@@ -119,6 +119,11 @@ get_word:
 	
 	; fill the array with the word
 
+
+	; close the file
+	mov rax, 3			; close(
+	mov rdi, [rbp-8]	;	fd
+	syscall				; )
 .exit:	
 	mov rsp, rbp
 	pop rbp
