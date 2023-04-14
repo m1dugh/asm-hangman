@@ -75,6 +75,9 @@ read_input:
 	
 
 main:
+    push rbp
+    mov rbp, rsp
+    sub rsp, 32
 	; startup
 	; sets up the secret word
 	call get_word
@@ -156,6 +159,8 @@ main:
 	call printf
 
 .exit:	
+    mov rsp, rbp
+    pop rbp
 
 	; exit(0);
 	mov rax, 60
